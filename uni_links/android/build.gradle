@@ -4,31 +4,36 @@ version '0.4.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()        // ✅ jcenter deprecated — এর বদলে mavenCentral
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:8.5.0'  // ✅ Updated Gradle Plugin
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    namespace "name.avioli.unilinks"      // ✅ <-- 🔥 এই লাইনটাই নতুন যোগ হয়েছে
+    namespace "name.avioli.unilinks"   // ✅ Required for AGP 8+
+    compileSdkVersion 33
 
-    compileSdkVersion 33                  // ✅ আপডেটেড SDK ভার্সন
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 33               // ✅ এটা যোগ করা ভালো
+        minSdkVersion 21               // ✅ 16 → 21 (modern Flutter requires 21+)
+        targetSdkVersion 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {                   // ✅ Needed for JDK 17 compatibility
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     lintOptions {
